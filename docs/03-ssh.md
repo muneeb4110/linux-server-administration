@@ -47,3 +47,45 @@ deployer
 DESKTOP-STHMOKV
 
 ```
+
+## Hardening the SSH server
+
+`scripts/ssh-hardening-lab.sh` writes `/etc/ssh/sshd_config.d/00-hardening.conf` with:
+
+- `PasswordAuthentication no` and `KbdInteractiveAuthentication no`: only keys are accepted, so password-guessing bots get nowhere.
+- `PermitRootLogin no`: nobody logs in directly as root.
+- `MaxAuthTries 3`: fewer guesses per connection.
+
+Lessons:
+
+- sshd uses the first value it finds, and files in `sshd_config.d/` are read in alphabetical order, so the file is named `00-hardening.conf`.
+- Run `sudo sshd -t` before restarting, so a typo does not lock me out.
+- On a real server, keep one SSH session open while testing a new config.
+
+## Output (hardening run)
+
+```text
+$ cat /etc/ssh/sshd_config.d/00-hardening.conf
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin no
+MaxAuthTries 3
+
+$ sudo sshd -t
+
+$ sudo systemctl restart ssh
+
+$ sudo sshd -T | grep -Ei "passwordauthentication|permitrootlogin|maxauthtries"
+maxauthtries 3
+permitrootlogin no
+passwordauthentication no
+
+--- the key still works:
+$ ssh -i /home/muneeb/.ssh/lab_ed25519 -o IdentitiesOnly=yes deployer@localhost whoami
+deployer
+
+--- password login is refused (we do not offer the key):
+$ ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password -o BatchMode=yes deployer@localhost whoami
+deployer@localhost: Permission denied (publickey).
+
+```
