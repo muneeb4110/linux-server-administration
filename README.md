@@ -9,8 +9,8 @@ A hands-on lab where I configure and administer a Linux server (Ubuntu 26.04 LTS
 
 ## Roadmap
 
-- [ ] 1. Users, groups and sudo
-- [ ] 2. File permissions
+- [x] 1. Users, groups and sudo
+- [x] 2. File permissions
 - [ ] 3. SSH server and key-based login
 - [ ] 4. Firewall with ufw
 - [ ] 5. nginx as a reverse proxy for the app
