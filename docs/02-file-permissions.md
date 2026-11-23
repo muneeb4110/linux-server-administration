@@ -6,9 +6,9 @@ Understand how `rwx` permissions work for the owner, the group and everyone else
 
 ## Reading `ls -l`
 
-````text
+```text
 -rw-r-----  muneeb  devops  secret.txt
-````
+```
 
 - First character: file type (`-` file, `d` directory)
 - Next 9 characters: owner `rw-`, group `r--`, others `---`
@@ -30,7 +30,7 @@ The script `scripts/permissions-lab.sh` creates a file, changes its mode and gro
 
 ## Output (real run)
 
-````text
+```text
 $ ls -l secret.txt
 -rw-r--r-- 1 muneeb muneeb 7 Nov 23 17:23 secret.txt
 
